@@ -1,4 +1,7 @@
 package culturemedia.exception;
 
-public class CulturetecaException {
+public class CulturetecaException extends Exception{
+    public CulturetecaException(String message) {
+        super(message);
+    }
 }

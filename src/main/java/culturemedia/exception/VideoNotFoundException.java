@@ -1,4 +1,7 @@
 package culturemedia.exception;
 
-public class VideoNotFonudException {
+public class VideoNotFoundException extends CulturetecaException{
+    public VideoNotFoundException(String message) {
+        super(message);
+    }
 }
