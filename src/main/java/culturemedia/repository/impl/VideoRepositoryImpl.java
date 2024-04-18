@@ -3,22 +3,28 @@ package culturemedia.repository.impl;
 import culturemedia.model.Video;
 import culturemedia.repository.VideoRepository;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class VideoRepositoryImpl implements VideoRepository {
+    private static final List<Video> videos = new ArrayList<Video>();
+
     @Override
     public List<Video> findAll() {
-        return List.of();
+        return videos;
     }
 
     @Override
     public Video add(Video video) {
-        return video;
+        if(videos.add(video)){
+            return video;
+        }
+        return null;
     }
 
     @Override
     public List<Video> find(String title) {
-        return List.of();
+        return findAll().stream().filter(video -> video.title().equals(title)).toList();
     }
 
     @Override
