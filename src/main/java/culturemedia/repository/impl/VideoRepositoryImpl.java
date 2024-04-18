@@ -13,7 +13,7 @@ public class VideoRepositoryImpl implements VideoRepository {
 
     @Override
     public Video add(Video video) {
-        return null;
+        return video;
     }
 
     @Override
