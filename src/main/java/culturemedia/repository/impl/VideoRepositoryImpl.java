@@ -29,6 +29,6 @@ public class VideoRepositoryImpl implements VideoRepository {
 
     @Override
     public List<Video> find(Double fromDuration, Double toDuration) {
-        return List.of();
+        return findAll().stream().filter(video -> video.duration() >= fromDuration && video.duration() <= toDuration).toList();
     }
 }

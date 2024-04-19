@@ -18,6 +18,20 @@ public class CulturetecaServiceImpl implements CulturetecaService {
         this.viewsrepository = viewsrepository;
     }
 
+    public List<Video> find(String title) throws VideoNotFoundException {
+        if (videorepository.find(title).isEmpty()) {
+            throw new VideoNotFoundException();
+        }
+        return videorepository.find(title);
+    }
+
+    public List<Video> find(Double from, Double to) throws VideoNotFoundException {
+        if (videorepository.find(from, to).isEmpty()) {
+            throw new VideoNotFoundException();
+        }
+        return videorepository.find(from, to);
+    }
+
     @Override
     public List<Video> findAll() throws VideoNotFoundException {
         List<Video> videos = videorepository.findAll();
