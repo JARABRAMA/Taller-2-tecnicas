@@ -48,4 +48,32 @@ class CulturetecaServiceImplTest {
         List<Video> videos = culturetecaService.findAll();
         assertEquals(expected, videos);
     }
+
+    @Test
+    void find_by_title_video_exception() {
+        assertThrows(VideoNotFoundException.class, () -> {culturetecaService.find("title");});
+    }
+
+    @Test
+    void find_by_duration_video_exception() {
+        assertThrows(VideoNotFoundException.class, () -> {culturetecaService.find(0.0, 5.0);});
+    }
+
+    @Test
+    void find_by_title_video() throws VideoNotFoundException {
+        List<Video> expected = new ArrayList<>();
+        expected.add(video);
+        culturetecaService.add(video);
+        List<Video> result = culturetecaService.find(video.title());
+        assertEquals(expected, result);
+    }
+
+    @Test
+    void find_by_duration_video() throws VideoNotFoundException {
+        List<Video> expected = new ArrayList<>();
+        expected.add(video);
+        culturetecaService.add(video);
+        List<Video> result = culturetecaService.find(0.0, video.duration());
+        assertEquals(expected, result);
+    }
 }
