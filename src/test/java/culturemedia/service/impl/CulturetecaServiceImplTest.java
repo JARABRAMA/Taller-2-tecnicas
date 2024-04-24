@@ -55,12 +55,12 @@ class CulturetecaServiceImplTest {
 
     @Test
     void find_by_title_video_exception() {
-        assertThrows(VideoNotFoundException.class, () -> {culturetecaService.find("title");});
+        assertThrows(VideoNotFoundException.class, () -> culturetecaService.find("title"));
     }
 
     @Test
     void find_by_duration_video_exception() {
-        assertThrows(VideoNotFoundException.class, () -> {culturetecaService.find(0.0, 5.0);});
+        assertThrows(VideoNotFoundException.class, () -> culturetecaService.find(0.0, 5.0));
     }
 
     @Test
