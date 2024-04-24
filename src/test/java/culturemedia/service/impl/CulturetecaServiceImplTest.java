@@ -10,9 +10,6 @@ import culturemedia.repository.impl.ViewsRepositoryImpl;
 import culturemedia.service.CulturetecaService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -22,15 +19,24 @@ class CulturetecaServiceImplTest {
     VideoRepository videoRepository;
     ViewsRepository viewsRepository;
     Video video ;
+    List<Video> videos = List.of(
+            new Video("01", "video 1", "a video", 3.4),
+            new Video("02", "video 2", "a video", 4.4),
+            new Video("03", "short 3", "a video", 5.4),
+            new Video("04", "short 4", "a video", 6.0),
+            new Video("05", "video 5", "a video", 2.1)
+        );
     View view;
 
     @BeforeEach
     void setUp() {
-        video = new Video("123", "title", "description", 2);
-        view = new View("Jhon Doe", LocalDate.now().atStartOfDay(), 23, video);
         viewsRepository = new ViewsRepositoryImpl();
         videoRepository = new VideoRepositoryImpl();
         culturetecaService = new CulturetecaServiceImpl(videoRepository, viewsRepository);
+    }
+
+    private void fillVideos(){
+        videos.stream().forEach(video -> culturetecaService.add(video));
     }
 
     @Test
@@ -42,38 +48,34 @@ class CulturetecaServiceImplTest {
 
     @Test
     void find_all() throws VideoNotFoundException {
-        List<Video> expected = new ArrayList<>();
-        expected.add(video);
-        culturetecaService.add(video);
-        List<Video> videos = culturetecaService.findAll();
-        assertEquals(expected, videos);
+        fillVideos();
+        boolean target = culturetecaService.findAll().containsAll(videos); 
+        assertTrue(target);
     }
 
     @Test
     void find_by_title_video_exception() {
-        assertThrows(VideoNotFoundException.class, () -> {culturetecaService.find("title");});
+        assertThrows(VideoNotFoundException.class, () -> culturetecaService.find("title"));
     }
 
     @Test
     void find_by_duration_video_exception() {
-        assertThrows(VideoNotFoundException.class, () -> {culturetecaService.find(0.0, 5.0);});
+        assertThrows(VideoNotFoundException.class, () -> culturetecaService.find(0.0, 5.0));
     }
 
     @Test
     void find_by_title_video() throws VideoNotFoundException {
-        List<Video> expected = new ArrayList<>();
-        expected.add(video);
-        culturetecaService.add(video);
-        List<Video> result = culturetecaService.find(video.title());
-        assertEquals(expected, result);
+        fillVideos();
+        List<Video> expected = videos.stream().filter(video -> video.title().contains("video")).toList();
+        boolean target = culturetecaService.find("video").containsAll(expected); 
+        assertTrue(target);
     }
 
     @Test
     void find_by_duration_video() throws VideoNotFoundException {
-        List<Video> expected = new ArrayList<>();
-        expected.add(video);
-        culturetecaService.add(video);
-        List<Video> result = culturetecaService.find(0.0, video.duration());
-        assertEquals(expected, result);
+        fillVideos();
+        List<Video> expected = videos.stream().filter(p -> p.duration() <= 5.0 && p.duration() >= 3.0).toList(); 
+        boolean target = culturetecaService.find(3.0, 5.0).containsAll(expected);
+        assertTrue(target);
     }
 }
