@@ -5,6 +5,8 @@ import culturemedia.model.Video;
 import culturemedia.model.View;
 import culturemedia.repository.VideoRepository;
 import culturemedia.repository.ViewsRepository;
+import culturemedia.repository.impl.VideoRepositoryImpl;
+import culturemedia.repository.impl.ViewsRepositoryImpl;
 import culturemedia.service.CulturetecaService;
 
 import java.util.List;
@@ -16,6 +18,10 @@ public class CulturetecaServiceImpl implements CulturetecaService {
     public CulturetecaServiceImpl(VideoRepository videorepository, ViewsRepository viewsrepository) {
         this.videorepository = videorepository;
         this.viewsrepository = viewsrepository;
+    }
+    public CulturetecaServiceImpl(){
+        this.videorepository = new VideoRepositoryImpl();
+        this.viewsrepository = new ViewsRepositoryImpl();
     }
 
     public List<Video> find(String title) throws VideoNotFoundException {
