@@ -1,17 +1,17 @@
 package culturemedia.controller;
 
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
+import culturemedia.exception.CulturetecaException;
 import culturemedia.exception.VideoNotFoundException;
 import culturemedia.model.Video;
 import culturemedia.service.CulturetecaService;
 import culturemedia.service.impl.CulturetecaServiceImpl;
+import jakarta.validation.Valid;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -39,7 +39,9 @@ public class CultureMediaController {
     }
 
     @PostMapping( value = "/video")
-    public Video save(@RequestBody Video video){
+    public Video save(@RequestBody @Valid Video video) throws CulturetecaException {
+        if (video.duration() <= 0)
+            throw new CulturetecaException("the duration is not valid");
         return cultureMediaService.add(video);
     }
 }
