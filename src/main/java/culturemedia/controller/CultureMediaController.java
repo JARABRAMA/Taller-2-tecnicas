@@ -3,7 +3,6 @@ package culturemedia.controller;
 import java.util.Collections;
 import java.util.List;
 
-import culturemedia.exception.CulturetecaException;
 import culturemedia.exception.VideoNotFoundException;
 import culturemedia.model.Video;
 import culturemedia.service.CulturetecaService;
@@ -13,12 +12,12 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
 
 @RestController
+@CrossOrigin(origins = "*")
+@RequestMapping("/videos")
 public class CultureMediaController {
     private static final Logger log = LogManager.getLogger();
     private final CulturetecaService cultureMediaService;
@@ -28,7 +27,7 @@ public class CultureMediaController {
         this.cultureMediaService = new CulturetecaServiceImpl();
     }
 
-    @GetMapping(value = "/video")
+    @GetMapping
     public ResponseEntity<List<Video>> findAllVideos(){
         try {
             return ResponseEntity.ok().body(cultureMediaService.findAll());
@@ -38,10 +37,13 @@ public class CultureMediaController {
         }
     }
 
-    @PostMapping( value = "/video")
-    public Video save(@RequestBody @Valid Video video) throws CulturetecaException {
-        if (video.duration() <= 0)
-            throw new CulturetecaException("the duration is not valid");
-        return cultureMediaService.add(video);
+    @PostMapping
+    public ResponseEntity<Video> save(@RequestBody @Valid Video video) {
+        var result = cultureMediaService.add(video);
+        log.info("input class: {}", video.toString());
+        if (result == null){
+            return ResponseEntity.badRequest().body(null);
+        }
+        return ResponseEntity.ok().body(result);
     }
 }

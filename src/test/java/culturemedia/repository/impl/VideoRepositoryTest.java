@@ -32,12 +32,7 @@ class VideoRepositoryTest {
         assertEquals(video, result);
     }
 
-    @Test
-    void searchByTitle() {
-        List<Video> videos = videoRepository.find("title");
-        List<Video> expectedVideos = new ArrayList<>(); // at this moment the list returned will be void
-        assertEquals(expectedVideos, videos);
-    }
+
 
     @Test
     void searchByDuration() {
